@@ -4,7 +4,7 @@
   "description": "Web-based administration interface for CS2D gaming server ",
   "main": "main.js",
   "scripts": {
-    "start": "node --experimental-modules main.js",
+    "start": "tsc; node ./dist/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Christian Paul",
@@ -22,6 +22,10 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "@types/express": "^4.11.0",
+    "@types/helmet": "0.0.37",
+    "@types/passport": "^0.4.2",
+    "@types/passport-local": "^1.0.32",
     "eslint": "^4.14.0"
   }
 }

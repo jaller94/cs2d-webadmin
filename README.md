@@ -3,6 +3,10 @@ Web-based administration interface for CS2D gaming server for Linux
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/1aa4bfbd72be3ccc345a/maintainability)](https://codeclimate.com/github/jaller94/cs2d-webadmin/maintainability)
 
+## Requirements
+Make sure the cs2d_dedicated server is runnable on your system. It needs some libraries that you might not have installed.
+for this server you need `node`, `npm` and `tsc` (TypeScript) globally installed.
+
 ## First start
 1. Create a folder `server`.
 2. Copy your CS2D server into the folder `server`.

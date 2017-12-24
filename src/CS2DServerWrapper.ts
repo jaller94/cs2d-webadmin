@@ -1,12 +1,18 @@
-const startGame = require('./CS2DRunner.js');
+import startGame from './CS2DRunner';
 
-module.exports = class CS2DServerWrapper {
+export default class CS2DServerWrapper {
+	log: any;
+	game: null | {stderr, stdin};
+	players: string[];
+	serverLog: string[];
+	serverErrors: string[];
+
     constructor() {
         this.game;
         this.serverLog = [];
         this.serverErrors = [];
         this.log = [];
-        this.player = [];
+        this.players = [];
     }
 
     start() {
@@ -33,18 +39,18 @@ module.exports = class CS2DServerWrapper {
         return this.players.slice(0);
     }
 
-    runCommand(command) {
+    runCommand(command: string) {
         if (!this.game) return 'No game running!';
         if (!command) return 'No command specified!';
         console.log(`Processing game command: ${command}`);
         this.game.stdin.write(command, 'utf8');
     }
 
-    serverLog() {
+    getServerLog() {
         return this.serverLog.slice(0);
     }
 
-    serverErrors() {
+    getServerErrors() {
         return this.serverErrors.slice(0);
     }
 

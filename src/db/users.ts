@@ -2,7 +2,7 @@ var records = [
     { id: 1, username: 'Jaller', password: 'hi', displayName: 'Christian', emails: [ { value: 'jaller@example.com' } ] },
 ];
 
-exports.findById = function(id, cb) {
+export function findById(id: number, cb: function) {
     process.nextTick(function() {
         const idx = id - 1;
         if (records[idx]) {
@@ -13,7 +13,7 @@ exports.findById = function(id, cb) {
     });
 };
 
-exports.findByUsername = function(username, cb) {
+export function findByUsername(username: string, cb: function) {
     process.nextTick(function() {
         for (var i = 0, len = records.length; i < len; i++) {
             var record = records[i];

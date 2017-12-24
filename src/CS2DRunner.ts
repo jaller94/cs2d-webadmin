@@ -1,7 +1,7 @@
-const { createWriteStream } = require('fs');
-const { spawn } = require('child_process');
+import { createWriteStream } from 'fs';
+import { spawn } from 'child_process';
 
-module.exports = function startGame () {
+export default function startGame(): {stderr, stdin} {
     // Create file-based stream for the stdin
     process.stdout.write('Opening stdin stream... ');
     const stdin = createWriteStream('server/stdin.stream');

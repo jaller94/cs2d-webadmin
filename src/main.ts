@@ -1,13 +1,13 @@
-const express = require('express');
-const helmet = require('helmet');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+import * as express from 'express';
+import * as helmet from 'helmet';
+import * as passport from 'passport';
+import { Strategy } from 'passport-local';
 
-const db = require('./db');
+import * as db from './db/index';
 
-passport.use(new LocalStrategy(
-    function(username, password, cb) {
-        db.users.findByUsername(username, function(err, user) {
+passport.use(new Strategy(
+    function(username:string, password:string, cb:function) {
+        db.users.findByUsername(username, function(err:Error, user) {
             if (err) { return cb(err); }
             if (!user) { return cb(null, false); }
             if (user.password != password) { return cb(null, false); }
@@ -23,11 +23,11 @@ passport.use(new LocalStrategy(
 // typical implementation of this is as simple as supplying the user ID when
 // serializing, and querying the user record by ID from the database when
 // deserializing.
-passport.serializeUser(function(user, cb) {
+passport.serializeUser(function(user, cb:function) {
     cb(null, user.id);
 });
 
-passport.deserializeUser(function(id, cb) {
+passport.deserializeUser(function(id:string, cb:function) {
     db.users.findById(id, function (err, user) {
         if (err) { return cb(err); }
         cb(null, user);
@@ -37,7 +37,7 @@ passport.deserializeUser(function(id, cb) {
 const app = express();
 app.use(helmet());
 // Configure view engine to render EJS templates.
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/../views');
 app.set('view engine', 'ejs');
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
@@ -115,5 +115,5 @@ app.get('/message',
 
 app.listen(3000);
 
-const CS2DServerWrapper = require('./CS2DServerWrapper.js');
+import CS2DServerWrapper from './CS2DServerWrapper.js';
 var cs2d = new CS2DServerWrapper();
