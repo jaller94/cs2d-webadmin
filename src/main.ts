@@ -5,8 +5,12 @@ import { Strategy } from 'passport-local';
 
 import * as db from './db/index';
 
+import CS2DServerWrapper from './CS2DServerWrapper.js';
+
+import { UserRecord } from "./db/users.d";
+
 passport.use(new Strategy(
-    function(username:string, password:string, cb:function) {
+    function(username: string, password: string, cb) {
         db.users.findByUsername(username, function(err:Error, user) {
             if (err) { return cb(err); }
             if (!user) { return cb(null, false); }
@@ -23,12 +27,12 @@ passport.use(new Strategy(
 // typical implementation of this is as simple as supplying the user ID when
 // serializing, and querying the user record by ID from the database when
 // deserializing.
-passport.serializeUser(function(user, cb:function) {
+passport.serializeUser(function(user: UserRecord, cb: (err: Error, id: number) => void) {
     cb(null, user.id);
 });
 
-passport.deserializeUser(function(id:string, cb:function) {
-    db.users.findById(id, function (err, user) {
+passport.deserializeUser(function(id: number, cb) {
+    db.users.findById(id, function (err: Error, user: UserRecord) {
         if (err) { return cb(err); }
         cb(null, user);
     });
@@ -115,5 +119,4 @@ app.get('/message',
 
 app.listen(3000);
 
-import CS2DServerWrapper from './CS2DServerWrapper.js';
 var cs2d = new CS2DServerWrapper();

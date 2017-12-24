@@ -1,7 +1,8 @@
 import { createWriteStream } from 'fs';
-import { spawn } from 'child_process';
+import { spawn, ChildProcess } from 'child_process';
+import { Stream } from "stream";
 
-export default function startGame(): {stderr, stdin} {
+export default function startGame(): void | ChildProcess {
     // Create file-based stream for the stdin
     process.stdout.write('Opening stdin stream... ');
     const stdin = createWriteStream('server/stdin.stream');
