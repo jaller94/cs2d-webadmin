@@ -1,0 +1,54 @@
+<% if (!user) { %>
+    <p>Welcome! Please <a href="/login">log in</a>.</p>
+<% } else { %>
+    <script>
+	function startServer() {
+        httpGet('/start');
+    }
+
+    function stopServer() {
+        httpGet('/stop');
+    }
+
+    function kickPlayer(id) {
+        if (!(id >= 1 && id <= 32)) return false;
+        httpGet('/kick/' + id);
+    }
+
+    function message() {
+        httpGet('/message');
+    }
+
+    function httpGet(theUrl) {
+        const xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", theUrl );
+        xmlHttp.send( null );
+    }
+    </script>
+    <p>Hello, <%= user.username %>. View your <a href="/profile">profile</a>.</p>
+    <button onclick="startServer();">Start Server</button>
+    <button onclick="stopServer();">Stop Server</button>
+    <button onclick="message();">Message</button>
+    <br>
+    <button onclick="kickPlayer(1);">Kick player 1</button>
+    <button onclick="kickPlayer(2);">Kick player 2</button>
+    <button onclick="kickPlayer(3);">Kick player 3</button>
+    <button onclick="kickPlayer(4);">Kick player 4</button>
+    <button onclick="kickPlayer(5);">Kick player 5</button>
+    <button onclick="kickPlayer(6);">Kick player 6</button>
+    <button onclick="kickPlayer(7);">Kick player 7</button>
+    <button onclick="kickPlayer(8);">Kick player 8</button>
+    <button onclick="kickPlayer(9);">Kick player 9</button>
+    <button onclick="kickPlayer(10);">Kick player 10</button>
+    <button onclick="kickPlayer(11);">Kick player 11</button>
+    <button onclick="kickPlayer(12);">Kick player 12</button>
+    <button onclick="kickPlayer(13);">Kick player 13</button>
+    <button onclick="kickPlayer(14);">Kick player 14</button>
+    <button onclick="kickPlayer(15);">Kick player 15</button>
+    <button onclick="kickPlayer(16);">Kick player 16</button>
+    <button onclick="kickPlayer(17);">Kick player 17</button>
+    <button onclick="kickPlayer(18);">Kick player 18</button>
+    <button onclick="kickPlayer(19);">Kick player 19</button>
+    <button onclick="kickPlayer(20);">Kick player 20</button>
+    <button onclick="kickPlayer(21);">Kick player 21</button>
+<% } %>
