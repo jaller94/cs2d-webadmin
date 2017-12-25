@@ -4,7 +4,7 @@ var records: UserRecord[] = [
     { id: 1, username: 'Jaller', password: 'hi', displayName: 'Christian', emails: [ { value: 'jaller@example.com' } ] },
 ];
 
-export function findById(id: number, cb: (a: null | Error, b?: UserRecord) => void) {
+export function findById(id: number, cb: (err: null | Error, user?: UserRecord) => void) {
     process.nextTick(function() {
         const idx = id - 1;
         if (records[idx]) {

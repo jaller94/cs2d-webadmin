@@ -11,7 +11,7 @@ import { UserRecord } from "./db/users.d";
 
 passport.use(new Strategy(
     function(username: string, password: string, cb) {
-        db.users.findByUsername(username, function(err:Error, user) {
+        db.users.findByUsername(username, (err: null | Error, user: null | UserRecord) => {
             if (err) { return cb(err); }
             if (!user) { return cb(null, false); }
             if (user.password != password) { return cb(null, false); }
@@ -27,12 +27,12 @@ passport.use(new Strategy(
 // typical implementation of this is as simple as supplying the user ID when
 // serializing, and querying the user record by ID from the database when
 // deserializing.
-passport.serializeUser(function(user: UserRecord, cb: (err: null | Error, id: number) => void) {
+passport.serializeUser(function(user: UserRecord, cb: (err: null | Error, id?: number) => void) {
     cb(null, user.id);
 });
 
 passport.deserializeUser(function(id: number, cb) {
-    db.users.findById(id, function (err: Error, user: UserRecord) {
+    db.users.findById(id, (err: null | Error, user?: UserRecord) => {
         if (err) { return cb(err); }
         cb(null, user);
     });
