@@ -40,9 +40,12 @@ passport.deserializeUser(function(id: number, cb) {
 
 const app = express();
 app.use(helmet());
+
+const rootFolder = __dirname + '/..';
 // Configure view engine to render EJS templates.
-app.set('views', __dirname + '/../views');
+app.set('views', rootFolder + '/views');
 app.set('view engine', 'ejs');
+app.use('/css', express.static(rootFolder + '/www/css'));
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
 app.use(require('morgan')('combined'));

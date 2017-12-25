@@ -1,0 +1,55 @@
+html {
+    font-family: sans-serif;
+}
+
+/* Large */
+.player-list--box {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+/* Medium screens */
+@media all and (max-width: 800px) {
+  .player-list--box {
+    /* When on medium sized screens, we center it by evenly distributing empty space around items */
+    justify-content: space-around;
+  }
+}
+
+/* Small screens */
+@media all and (max-width: 500px) {
+  .player-list--box {
+    /* On small screens, we are no longer using row direction but column */
+    flex-direction: column;
+  }
+}
+
+.player-list--player {
+    width: 15rem;
+    padding: 0.5rem;
+    margin: 0.2rem;
+    background-color: #eee;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+}
+
+.player-list--player-id {
+    float: right;
+    text-align: right;
+    width: 2.5em;
+    color: #777;
+    font-style: italic;
+    overflow: hidden;
+}
+
+.player-list--player-id::before {
+    content: '#';
+}
+
+.player-list--player-name {
+    width: 10em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

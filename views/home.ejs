@@ -1,21 +1,27 @@
+<html>
+<head>
+    <title>CS2D Webadmin</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
 <% if (!user) { %>
     <p>Welcome! Please <a href="/login">log in</a>.</p>
-<% } else { %>
-    <style>
-    table {
-        border: black 2px solid;
-        border-collapse: collapse;
-    }
+<% } else {
 
-    table th {
-        border: black 1px solid;
-    }
+    Array.prototype.random = function () {
+        return this[Math.floor(Math.random()*this.length)];
+    };
 
-    table td {
-        border: black 1px solid;
+    function generateUsername() {
+        var a = 'Randy,Best,Uber,Speedy,xXx,Cool,Good,Evil,Super Mega Powerful'.split(',');
+        var b = 'Rainbow,Gamer,Hacker,Morty,G4m3r'.split(',');
+        var c = '2000,99,98,11111,42,xXx,!!!,xXx xXx'.split(',');
+        return `${a.random()} ${b.random()} ${c.random()}`;
     }
-    </style>
+    %>
     <script>
+
+
     function startServer() {
         httpGet('/start');
     }
@@ -30,6 +36,8 @@
     }
 
     function message() {
+        const input = document.getDocumentById('input_message');
+        const message = input.value;
         httpGet('/message');
     }
 
@@ -42,26 +50,22 @@
     <p>Hello, <%= user.username %>. View your <a href="/profile">profile</a>.</p>
     <button onclick="startServer();">Start Server</button>
     <button onclick="stopServer();">Stop Server</button>
-    <button onclick="message();">Message</button>
+    <div>
+        <label for="input_message">Global message</label>
+        <input id="input_message" type="text" placeholder="Type a message">
+        <button onclick="message();">Send</button>
+    </div>
     <br>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% for (i = 1; i <= 32; i++) { %>
-                <tr>
-                    <td><%= i %></td>
-                    <td>Not available</td>
-                    <td>
-                        <button onclick="kickPlayer(<%= i %>);">Kick</button>
-                    </td>
-                </tr>
-            <% } %>
-    </table>
+    <div class="player-list--box">
+        <% for (i = 1; i <= 32; i++) { %>
+        <div class="player-list--player">
+            <div class="player-list--player-id"><%= i %></div>
+            <div class="player-list--player-name"><%= generateUsername() %></div>
+            <button onclick="kickPlayer(<%= i %>);">Kick</button>
+        </div>
+        <% } %>
+    </div>
 
 <% } %>
+</body>
+</html>
