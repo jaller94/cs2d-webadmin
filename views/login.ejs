@@ -1,11 +1,21 @@
 <form action="/login" method="post">
     <div>
-    <label>Username:</label>
-    <input type="text" name="username"/><br/>
+    <label for="username">Username:</label>
+    <input
+        id="username"
+        type="text"
+        name="username"
+        autocomplete="username"
+    /><br/>
     </div>
     <div>
-    <label>Password:</label>
-    <input type="password" name="password"/>
+    <label for="password">Password:</label>
+    <input
+        id="password"
+        type="password"
+        name="password"
+        autocomplete="current-password"
+    />
     </div>
     <div>
     <input type="submit" value="Submit"/>
