@@ -3,6 +3,8 @@ import * as helmet from 'helmet';
 import * as passport from 'passport';
 import { Strategy } from 'passport-local';
 
+import { readFile, writeFile } from 'fs';
+
 import * as db from './db/index';
 
 import CS2DServerWrapper from './CS2DServerWrapper.js';
@@ -88,11 +90,18 @@ app.get('/profile',
     }
 );
 
+app.get('/config',
+    require('connect-ensure-login').ensureLoggedIn(),
+    function(req, res) {
+        res.render('config', { user: req.user });
+    }
+);
+
 app.get('/start',
     require('connect-ensure-login').ensureLoggedIn(),
     function(req, res) {
         cs2d.start();
-        res.render('profile', { user: req.user });
+        res.end();
     }
 );
 
@@ -100,7 +109,7 @@ app.get('/stop',
     require('connect-ensure-login').ensureLoggedIn(),
     function(req, res) {
         cs2d.askToQuit();
-        res.render('profile', { user: req.user });
+        res.end();
     }
 );
 
@@ -108,7 +117,7 @@ app.get('/kick/1',
     require('connect-ensure-login').ensureLoggedIn(),
     function(req, res) {
         cs2d.runCommand('kick 1');
-        res.render('profile', { user: req.user });
+        res.end();
     }
 );
 
@@ -116,9 +125,42 @@ app.get('/message',
     require('connect-ensure-login').ensureLoggedIn(),
     function(req, res) {
         cs2d.runCommand('msg Hello World');
-        res.render('profile', { user: req.user });
+        res.end();
     }
 );
+
+app.get(/^\/filesystem\/(.*)/,
+    require('connect-ensure-login').ensureLoggedIn(),
+    function(req, res) {
+        const filepath = req.params[0];
+        console.log(filepath);
+        console.log(req.body);
+        if (filepath === 'sys/serverinfo.txt') {
+            readFile('server/' + filepath, 'latin1', (err, data) => {
+                res.set({ 'Content-Type': 'text/plain; charset=utf8' })
+                if (err) res.end(err.message);
+                res.end(data);
+            })
+        }
+    }
+);
+
+
+app.post(/^\/filesystem\/(.*)/,
+    require('connect-ensure-login').ensureLoggedIn(),
+    function(req, res) {
+        const filepath = req.params[0];
+        console.log(filepath);
+        console.log(req.body);
+        if (filepath === 'sys/serverinfo.txt') {
+            writeFile('server/' + filepath, req.body, 'latin1', (err) => {
+                if (err) res.end(err.message);
+                res.end('success');
+            })
+        }
+    }
+);
+
 
 app.listen(3000);
 

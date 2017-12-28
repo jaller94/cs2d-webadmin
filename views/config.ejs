@@ -1,0 +1,69 @@
+<html>
+<head>
+    <title>CS2D Configuration - CS2D Webadmin</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<% if (!user) { %>
+    <p>Welcome! Please <a href="/login">log in</a>.</p>
+<% } else {
+
+    Array.prototype.random = function () {
+        return this[Math.floor(Math.random()*this.length)];
+    };
+
+    function generateUsername() {
+        var a = 'Randy,Best,Uber,Speedy,xXx,Cool,Good,Evil,Super Mega Powerful'.split(',');
+        var b = 'Rainbow,Gamer,Hacker,Morty,G4m3r'.split(',');
+        var c = '2000,99,98,11111,42,xXx,!!!,xXx xXx'.split(',');
+        return `${a.random()} ${b.random()} ${c.random()}`;
+    }
+    %>
+    <script>
+    function getServerInfo() {
+        const input = document.getElementById('input_serverinfo');
+        httpGet('/filesystem/sys/serverinfo.txt', (event) => {
+            const xhr = event.target;
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                input.value = xhr.responseText;
+            }
+        });
+    }
+
+    function putServerInfo() {
+        const input = document.getElementById('input_serverinfo');
+        httpPost('/filesystem/sys/serverinfo.txt', input.value);
+    }
+
+    function httpGet(theUrl, callback) {
+        const xmlHttp = new XMLHttpRequest();
+        if (callback) {
+            xmlHttp.onreadystatechange = callback.bind(xmlHttp.target);
+        }
+        xmlHttp.open( "GET", theUrl );
+        xmlHttp.send( null );
+    }
+
+    function httpPost(theUrl, data, callback) {
+        const xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "POST", theUrl );
+        xmlHttp.setRequestHeader("Content-Type", 'text/plain');
+        xmlHttp.send( data );
+    }
+    </script>
+    <h1>CS2D Configuration</h1>
+    <p>Hello, <%= user.username %>. View your <a href="/profile">profile</a>.</p>
+    <h2>sys/serverinfo.txt</h2>
+    <textarea
+        id="input_serverinfo"
+        rows="8"
+        cols="80"
+        placeholder="Click 'Load' to retrieve the current file."
+    ></textarea>
+    <p>
+        <button onclick="getServerInfo();">Load</button>
+        <button onclick="putServerInfo();">Save</button>
+    </p>
+<% } %>
+</body>
+</html>
