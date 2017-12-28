@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>CS2D Webadmin</title>
+    <title>Home - CS2D Webadmin</title>
     <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -36,7 +36,7 @@
     }
 
     function message() {
-        const input = document.getDocumentById('input_message');
+        const input = document.getElementById('input_message');
         const message = input.value;
         httpGet('/message');
     }
