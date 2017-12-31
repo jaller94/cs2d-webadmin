@@ -1,0 +1,51 @@
+<html>
+<head>
+    <title>CS2D Console - CS2D Webadmin</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<% if (!user) { %>
+    <p>Welcome! Please <a href="/login">log in</a>.</p>
+<% } else { %>
+    <script>
+    function getServerInfo() {
+        const input = document.getElementById('input_serverinfo');
+        httpGet('/filesystem/sys/serverinfo.txt', (event) => {
+            const xhr = event.target;
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                input.value = xhr.responseText;
+            }
+        });
+    }
+
+    function putServerInfo() {
+        const input = document.getElementById('input_serverinfo');
+        httpPost('/filesystem/sys/serverinfo.txt', input.value);
+    }
+
+    function httpGet(theUrl, callback) {
+        const xmlHttp = new XMLHttpRequest();
+        if (callback) {
+            xmlHttp.onreadystatechange = callback.bind(xmlHttp.target);
+        }
+        xmlHttp.open( 'GET', theUrl );
+        xmlHttp.send( null );
+    }
+
+    function httpPost(theUrl, data, callback) {
+        const xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( 'POST', theUrl );
+        xmlHttp.setRequestHeader('Content-Type', 'text/plain');
+        xmlHttp.send( data );
+    }
+    </script>
+    <% include includes/header.ejs %>
+    <h1>CS2D Console</h1>
+    <div>
+        <label for="input_message">Global message</label>
+        <input id="input_message" type="text" placeholder="Type a message">
+        <button onclick="message();">Send</button>
+    </div>
+<% } %>
+</body>
+</html>

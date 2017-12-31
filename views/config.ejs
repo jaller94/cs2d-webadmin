@@ -7,22 +7,17 @@
 <% if (!user) { %>
     <p>Welcome! Please <a href="/login">log in</a>.</p>
 <% } else {
-
-    Array.prototype.random = function () {
-        return this[Math.floor(Math.random()*this.length)];
-    };
-
-    function generateUsername() {
-        var a = 'Randy,Best,Uber,Speedy,xXx,Cool,Good,Evil,Super Mega Powerful'.split(',');
-        var b = 'Rainbow,Gamer,Hacker,Morty,G4m3r'.split(',');
-        var c = '2000,99,98,11111,42,xXx,!!!,xXx xXx'.split(',');
-        return `${a.random()} ${b.random()} ${c.random()}`;
-    }
+    const files = [
+        'bans.lst',
+        'mapcycle.cfg',
+        'server.cfg',
+        'serverinfo.txt',
+    ];
     %>
     <script>
-    function getServerInfo() {
-        const input = document.getElementById('input_serverinfo');
-        httpGet('/filesystem/sys/serverinfo.txt', (event) => {
+    function getConfig(inputId, filePath) {
+        const input = document.getElementById(inputId);
+        httpGet(`/filesystem/${filePath}`, (event) => {
             const xhr = event.target;
             if (xhr.readyState == XMLHttpRequest.DONE) {
                 input.value = xhr.responseText;
@@ -30,9 +25,9 @@
         });
     }
 
-    function putServerInfo() {
-        const input = document.getElementById('input_serverinfo');
-        httpPost('/filesystem/sys/serverinfo.txt', input.value);
+    function putConfig(inputId, filePath) {
+        const input = document.getElementById(inputId);
+        httpPost(`/filesystem/${filePath}`, input.value);
     }
 
     function httpGet(theUrl, callback) {
@@ -40,30 +35,37 @@
         if (callback) {
             xmlHttp.onreadystatechange = callback.bind(xmlHttp.target);
         }
-        xmlHttp.open( "GET", theUrl );
+        xmlHttp.open( 'GET', theUrl );
         xmlHttp.send( null );
     }
 
     function httpPost(theUrl, data, callback) {
         const xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "POST", theUrl );
-        xmlHttp.setRequestHeader("Content-Type", 'text/plain');
+        xmlHttp.open( 'POST', theUrl );
+        xmlHttp.setRequestHeader('Content-Type', 'text/plain');
         xmlHttp.send( data );
     }
     </script>
+    <% include includes/header.ejs %>
     <h1>CS2D Configuration</h1>
     <p>Hello, <%= user.username %>. View your <a href="/profile">profile</a>.</p>
-    <h2>sys/serverinfo.txt</h2>
-    <textarea
-        id="input_serverinfo"
-        rows="8"
-        cols="80"
-        placeholder="Click 'Load' to retrieve the current file."
-    ></textarea>
-    <p>
-        <button onclick="getServerInfo();">Load</button>
-        <button onclick="putServerInfo();">Save</button>
-    </p>
+
+    <% for (const file of files) {
+        const fullPath = 'sys/' + file;
+        const inputId = 'input_' + Math.random().toString();
+        %>
+        <h2><%= fullPath %></h2>
+        <textarea
+            id="<%= inputId %>"
+            rows="8"
+            cols="80"
+            placeholder="Click 'Load' to retrieve the current file."
+        ></textarea>
+        <p>
+            <button onclick="getConfig('<%= inputId %>', '<%= fullPath %>');">Load</button>
+            <button onclick="putConfig('<%= inputId %>', '<%= fullPath %>');">Save</button>
+        </p>
+    <% } %>
 <% } %>
 </body>
 </html>

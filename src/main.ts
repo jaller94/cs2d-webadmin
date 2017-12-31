@@ -97,6 +97,13 @@ app.get('/config',
     }
 );
 
+app.get('/console',
+    require('connect-ensure-login').ensureLoggedIn(),
+    function(req, res) {
+        res.render('console', { user: req.user });
+    }
+);
+
 app.get('/start',
     require('connect-ensure-login').ensureLoggedIn(),
     function(req, res) {
@@ -129,13 +136,21 @@ app.get('/message',
     }
 );
 
+const allowedFiles = [
+    'sys/bans.lst',
+    'sys/mapcycle.cfg',
+    'sys/server.cfg',
+    'sys/serverinfo.txt',
+    'sys/weapons_recoil.cfg',
+];
+
 app.get(/^\/filesystem\/(.*)/,
     require('connect-ensure-login').ensureLoggedIn(),
     function(req, res) {
         const filepath = req.params[0];
         console.log(filepath);
         console.log(req.body);
-        if (filepath === 'sys/serverinfo.txt') {
+        if (allowedFiles.includes(filepath)) {
             readFile('server/' + filepath, 'latin1', (err, data) => {
                 res.set({ 'Content-Type': 'text/plain; charset=utf8' })
                 if (err) res.end(err.message);
@@ -152,7 +167,7 @@ app.post(/^\/filesystem\/(.*)/,
         const filepath = req.params[0];
         console.log(filepath);
         console.log(req.body);
-        if (filepath === 'sys/serverinfo.txt') {
+        if (allowedFiles.includes(filepath)) {
             writeFile('server/' + filepath, req.body, 'latin1', (err) => {
                 if (err) res.end(err.message);
                 res.end('success');

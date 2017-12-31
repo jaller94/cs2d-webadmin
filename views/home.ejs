@@ -43,18 +43,14 @@
 
     function httpGet(theUrl) {
         const xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", theUrl );
+        xmlHttp.open( 'GET', theUrl );
         xmlHttp.send( null );
     }
     </script>
+    <% include includes/header.ejs %>
     <p>Hello, <%= user.username %>. View your <a href="/profile">profile</a>.</p>
     <button onclick="startServer();">Start Server</button>
     <button onclick="stopServer();">Stop Server</button>
-    <div>
-        <label for="input_message">Global message</label>
-        <input id="input_message" type="text" placeholder="Type a message">
-        <button onclick="message();">Send</button>
-    </div>
     <br>
     <div class="player-list--box">
         <% for (i = 1; i <= 32; i++) { %>
