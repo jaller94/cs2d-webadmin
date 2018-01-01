@@ -4,12 +4,8 @@ import * as passport from 'passport';
 import { Strategy } from 'passport-local';
 import { ensureLoggedIn } from 'connect-ensure-login';
 
-import { readFile, writeFile } from 'fs';
-
-import * as db from './db/index';
-
 import CS2DServerWrapper from './CS2DServerWrapper.js';
-
+import * as db from './db/index';
 import { UserRecord } from "./db/users.d";
 
 passport.use(new Strategy(
@@ -53,7 +49,7 @@ app.use('/css', express.static(rootFolder + '/www/css'));
 // logging, parsing, and session handling.
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -137,49 +133,9 @@ app.get('/message',
     }
 );
 
-const configFiles = [
-    'sys/bans.lst',
-    'sys/mapcycle.cfg',
-    'sys/server.cfg',
-    'sys/serverinfo.txt',
-    'sys/weapons_recoil.cfg',
-];
+import routerFileSystem from './router-filesystem';
 
-function isConfigFile(path: string) {
-    return configFiles.includes(path);
-}
-
-function isServerLuaFile(path : string) {
-    return path.startsWith('sys/lua/');
-}
-
-app.get(/^\/filesystem\/(.*)/,
-    ensureLoggedIn(),
-    function(req, res) {
-        const filepath = req.params[0];
-        if (isConfigFile(filepath)) {
-            readFile('server/' + filepath, 'latin1', (err, data) => {
-                res.set({ 'Content-Type': 'text/plain; charset=utf8' })
-                if (err) res.end(err.message);
-                res.end(data);
-            })
-        }
-    }
-);
-
-app.post(/^\/filesystem\/(.*)/,
-    ensureLoggedIn(),
-    function(req, res) {
-        const filepath = req.params[0];
-        if (isConfigFile(filepath)) {
-            writeFile('server/' + filepath, req.body, 'latin1', (err) => {
-                if (err) res.end(err.message);
-                res.end('success');
-            })
-        }
-    }
-);
-
+app.use('/filesystem', ensureLoggedIn(), routerFileSystem);
 
 app.listen(3000);
 
