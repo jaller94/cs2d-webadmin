@@ -1,12 +1,23 @@
-import { createWriteStream } from 'fs';
+import { createWriteStream, WriteStream } from 'fs';
 import { spawn, ChildProcess } from 'child_process';
 import { Stream } from "stream";
 
-export default function startGame(): void | ChildProcess {
+function openStdInStream(path: string): WriteStream {
     // Create file-based stream for the stdin
     process.stdout.write('Opening stdin stream... ');
-    const stdin = createWriteStream('server/stdin.stream');
+    const stdin = createWriteStream(path);
     process.stdout.write('Done\n');
+    return stdin;
+}
+
+function closeStdInStream(stream: WriteStream): void {
+    process.stdout.write('Closing stdin stream... ');
+    stream.close();
+    process.stdout.write('Done\n');
+}
+
+export default function startGame(): void | ChildProcess {
+    const stdin = openStdInStream('server/stdin.stream');
 
     process.stdout.write('Starting game server... ');
     const game = spawn('./server/cs2d_dedicated');
@@ -17,9 +28,7 @@ export default function startGame(): void | ChildProcess {
     process.stdout.write('Done\n');
 
     game.on('close', (code) => {
-        process.stdout.write('Closing stdin stream... ');
-        stdin.close();
-        process.stdout.write('Done\n');
+        closeStdInStream(stdin);
     });
 
     game.stdin = stdin;

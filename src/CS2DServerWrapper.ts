@@ -1,5 +1,6 @@
 import startGame from './CS2DRunner';
 import { ChildProcess } from "child_process";
+import CS2DPlayers from "./CS2DPlayers";
 
 export enum Status {
     running,
@@ -9,7 +10,7 @@ export enum Status {
 export default class CS2DServerWrapper {
     log: any;
     game: null | ChildProcess;
-    players: string[];
+    playersPlugin: null | CS2DPlayers;
     serverLog: string[];
     serverErrors: string[];
 
@@ -18,7 +19,6 @@ export default class CS2DServerWrapper {
         this.serverLog = [];
         this.serverErrors = [];
         this.log = [];
-        this.players = [];
     }
 
     start(): void | string {
@@ -31,6 +31,15 @@ export default class CS2DServerWrapper {
 
         this.log.push('Started server!');
         this.game = childProcess;
+        this.playersPlugin = new CS2DPlayers();
+
+        this.game.stdout.on('data', (data: string) => {
+            const line = data.toString().slice(0, -1);
+            if (this.playersPlugin) {
+                this.playersPlugin.processLine(line);
+            }
+            this.serverLog.push(line);
+        });
 
         this.game.stderr.on('data', (data: string) => {
             this.serverErrors.push(data);
@@ -39,16 +48,13 @@ export default class CS2DServerWrapper {
         this.game.on('close', (code: number) => {
             this.log.push(`Server exited with code ${code}`);
             this.game = null;
+            this.playersPlugin = null;
         });
     }
 
     askToQuit(): void {
         console.log('Sending quit command to server');
         this.runCommand('quit');
-    }
-
-    player(): string[] {
-        return this.players.slice(0);
     }
 
     runCommand(command: string): void | string {
