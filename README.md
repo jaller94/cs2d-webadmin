@@ -5,7 +5,7 @@ Web-based administration interface for CS2D gaming server for Linux
 
 ## Requirements
 Make sure the cs2d_dedicated server is runnable on your system. It needs some libraries that you might not have installed.
-for this server you need `node`, `npm` and `tsc` (TypeScript) globally installed.
+for this server you need `node`, `yarn` and `tsc` (TypeScript) globally installed.
 
 ## First start
 1. Create a folder `server`.
@@ -13,10 +13,10 @@ for this server you need `node`, `npm` and `tsc` (TypeScript) globally installed
 3. Download the Linux Dedicated server zip package from http://cs2d.com.
 4. Unpack the linux server into the folder `server`.
 5. Make sure the file `cs2d_dedicated` executable (e.g. using `chmod +x server/cs2d_dedicated`.
-6. Install the dependencies: `npm install`
+6. Install the dependencies: `yarn install`
 
 ## How to start the server
-1. Start the web server: `npm start`
+1. Start the web server: `yarn start`
 2. Open http://localhost:3000 in your browser.
 3. Log in using credentials from `db/users.js`.
 4. Press the button "Start server".
