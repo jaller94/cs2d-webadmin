@@ -60,5 +60,6 @@ typings/
 dist
 
 # Project definitions
-server
+/server
+!/server/sys/lua/*
 uploaded
