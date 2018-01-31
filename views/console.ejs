@@ -8,21 +8,6 @@
     <p>Welcome! Please <a href="/login">log in</a>.</p>
 <% } else { %>
     <script>
-    function getServerInfo() {
-        const input = document.getElementById('input_serverinfo');
-        httpGet('/filesystem/sys/serverinfo.txt', (event) => {
-            const xhr = event.target;
-            if (xhr.readyState == XMLHttpRequest.DONE) {
-                input.value = xhr.responseText;
-            }
-        });
-    }
-
-    function putServerInfo() {
-        const input = document.getElementById('input_serverinfo');
-        httpPost('/filesystem/sys/serverinfo.txt', input.value);
-    }
-
     function httpGet(theUrl, callback) {
         const xmlHttp = new XMLHttpRequest();
         if (callback) {
@@ -32,11 +17,24 @@
         xmlHttp.send( null );
     }
 
-    function httpPost(theUrl, data, callback) {
+    function httpPostJSON(theUrl, data, callback) {
+        const xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( 'POST', theUrl );
+        xmlHttp.setRequestHeader('Content-Type', 'application/json');
+        xmlHttp.send( JSON.stringify(data) );
+    }
+
+    function httpPostPlain(theUrl, data, callback) {
         const xmlHttp = new XMLHttpRequest();
         xmlHttp.open( 'POST', theUrl );
         xmlHttp.setRequestHeader('Content-Type', 'text/plain');
         xmlHttp.send( data );
+    }
+
+    function message() {
+        const input = document.getElementById('input_message');
+        const message = input.value;
+        httpPostJSON('/message', {message});
     }
     </script>
     <% include includes/header.ejs %>

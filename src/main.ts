@@ -125,11 +125,15 @@ app.get('/kick/1',
     }
 );
 
-app.get('/message',
+app.post('/message',
     ensureLoggedIn(),
     function(req, res) {
-        cs2d.runCommand('msg Hello World');
-        res.end();
+        let success = false;
+        if (req.body && req.body.message) {
+            cs2d.runCommand('msg ' + req.body.message);
+        }
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ success }));
     }
 );
 

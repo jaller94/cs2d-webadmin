@@ -35,12 +35,6 @@
         httpGet('/kick/' + id);
     }
 
-    function message() {
-        const input = document.getElementById('input_message');
-        const message = input.value;
-        httpGet('/message');
-    }
-
     function httpGet(theUrl) {
         const xmlHttp = new XMLHttpRequest();
         xmlHttp.open( 'GET', theUrl );
