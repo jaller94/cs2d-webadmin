@@ -101,10 +101,27 @@ app.get('/console',
     }
 );
 
+app.get('/players',
+    ensureLoggedIn(),
+    function(req, res) {
+        res.setHeader('Content-Type', 'application/json');
+        if (cs2d.playersPlugin) {
+            res.end(JSON.stringify({
+                players: cs2d.playersPlugin.players,
+                success: true,
+            }));
+        } else {
+            res.end(JSON.stringify({
+                success: false,
+            }));
+        }
+    }
+);
+
 app.get('/start',
     ensureLoggedIn(),
     function(req, res) {
-        cs2d.start();
+        console.log('cs2d start', cs2d.start());
         res.end();
     }
 );
