@@ -1,8 +1,9 @@
-import { createWriteStream, WriteStream } from 'fs';
+import { createWriteStream, unlinkSync, WriteStream } from 'fs';
 import { spawn, ChildProcess } from 'child_process';
 import { Stream } from "stream";
 
 function openStdInStream(path: string): WriteStream {
+    unlinkSync(path);
     // Create file-based stream for the stdin
     process.stdout.write('Opening stdin stream... ');
     const stdin = createWriteStream(path);
