@@ -2,6 +2,8 @@
 Web-based administration interface for CS2D gaming server for Linux
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/1aa4bfbd72be3ccc345a/maintainability)](https://codeclimate.com/github/jaller94/cs2d-webadmin/maintainability)
+[![dependencies Status](https://david-dm.org/jaller94/cs2d-webadmin/status.svg)](https://david-dm.org/jaller94/cs2d-webadmin)
+[![devDependencies Status](https://david-dm.org/jaller94/cs2d-webadmin/dev-status.svg)](https://david-dm.org/jaller94/cs2d-webadmin?type=dev)
 
 ## Requirements
 Make sure the cs2d_dedicated server is runnable on your system. It needs some libraries that you might not have installed.
