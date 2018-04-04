@@ -72,9 +72,9 @@
   dependencies:
     "@types/express" "*"
 
-"@types/passport@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-0.4.3.tgz#ca4f9611fb67d0c5d581a9005e9b89a2f5e91a3a"
+"@types/passport@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-0.4.4.tgz#934acc2b8870fdde1800f48effd92cbf5c2646f5"
   dependencies:
     "@types/express" "*"
 
